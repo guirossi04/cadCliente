@@ -1,0 +1,31 @@
+/* Estilo geral */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo do menu de topo */
+.menu-topo {
+    background-color: #333;
+    overflow: hidden;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estilo dos botões */
+.menu-topo .botao {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    text-decoration: none;
+    text-align: center;
+    margin: 0 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+/* Estilo para o hover */
+.menu-topo .botao:hover {
+    background-color: #45a049;
+}
