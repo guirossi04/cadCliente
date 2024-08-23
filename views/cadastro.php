@@ -118,9 +118,16 @@
             <span>Endereço</span>
             <div class="form-row">
                 <div class="form-group">
+                    <label for="cep">CEP</label>
+                    <input type="text" id="cep" name="cep" onchange="checaCEP()" required>
+                    <label name="cepvalido" id="cepvalido" hidden></label>
+                </div>
+                <div class="form-group">
                     <label for="logradouro">Endereço</label>
                     <input type="text" id="logradouro" name="logradouro" required>
                 </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
                     <label for="numero">Numero</label>
                     <input type="text" id="numero" name="numero" required>
@@ -144,16 +151,11 @@
                     <label for="uf">Estado</label>
                     <select id="uf" name="uf" required>
                         <option value="">Selecione o estado</option>
-                        <option value="sp">São Paulo</option>
-                        <option value="rj">Rio de Janeiro</option>
-                        <option value="mg">Minas Gerais</option>
-                        <option value="es">Espírito Santo</option>
-                        <!-- Adicione mais estados conforme necessário -->
+                        <option value="SP">São Paulo</option>
+                        <option value="RJ">Rio de Janeiro</option>
+                        <option value="MG">Minas Gerais</option>
+                        <option value="ES">Espírito Santo</option>
                     </select>
-                </div>
-                <div class="form-group">
-                    <label for="cep">CEP</label>
-                    <input type="text" id="cep" name="cep" required>
                 </div>
             </div>
             <div class="form-group">
@@ -188,5 +190,48 @@
             };
 
             xhr.send('cpf=' + cpf);
+        }
+
+        function checaCEP() {
+            var cep = document.getElementById('cep').value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/AdminCad/public/index.php/buscaCep', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.dados) {
+                        console.log(logradouro);
+                        cepvalido.style.color = 'black';
+                        cepvalido.hidden = true;
+                        logradouro.value = response.dados.logradouro;
+                        bairro.value = response.dados.bairro;
+                        cidade.value = response.dados.localidade;
+                        uf.value = response.dados.uf;
+                        logradouro.disabled = true;
+                        bairro.disabled = true;
+                        cidade.disabled = true;
+                        uf.disabled = true;
+                    } else {
+                        logradouro.disabled = false;
+                        bairro.disabled = false;
+                        cidade.disabled = false;
+                        uf.disabled = false;
+                        cepvalido.hidden = false;
+
+                        logradouro.value = "";
+                        bairro.value = "";
+                        cidade.value = "";
+                        uf.value = "";
+
+                        cepvalido.innerText = 'CEP não encontrado';
+                        cepvalido.style.color = 'red';
+                    }
+                }
+            };
+
+            xhr.send('cep=' + cep);
         }
     </script>

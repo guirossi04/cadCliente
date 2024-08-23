@@ -22,8 +22,4 @@ class ClienteController
         require_once '../views/cadastro.php';
     }
 
-    public function validaCpf(){
-        $func = new functions();
-        echo json_encode(['valid' => $func->valida_cpf($_POST['cpf'])], 200);
-    }
 }
