@@ -72,7 +72,7 @@
         }
     </style>
 
-<?php require_once '../views/header.php'; ?>
+    <?php require_once '../views/header.php'; ?>
 
     <div class="form-container">
         <?php if (isset($result) && !empty($result)) {
@@ -89,7 +89,8 @@
                 </div>
                 <div class="form-group">
                     <label for="cpf">CPF</label>
-                    <input type="text" id="cpf" name="cpf" onchange="validaCpf()" required>
+                    <input type="text" id="cpf" name="cpf" onchange="checaCPF()" required>
+                    <label name="resultado" id="resultado" hidden></label>
                 </div>
                 <div class="form-group">
                     <label for="rg">RG</label>
@@ -165,6 +166,27 @@
     <?php require_once '../views/footer.php'; ?>
 
     <script>
+        function checaCPF() {
+            var cpf = document.getElementById('cpf').value;
 
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/AdminCad/public/index.php/validaCpf', true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.valid) {
+                        resultado.hidden = true;
+                        resultado.innerText = '';
+                    } else {
+                        resultado.hidden = false;
+                        resultado.innerText = 'CPF inválido';
+                        resultado.style.color = 'red';
+                    }
+                }
+            };
+
+            xhr.send('cpf=' + cpf);
+        }
     </script>
